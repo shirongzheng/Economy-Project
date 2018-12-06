@@ -1,0 +1,15 @@
+application : Economy 10400 Project
+version : 1
+runtime : python3.6
+api_version : 1
+threadsafe: true
+
+handlers:
+- url: /static
+  static_dir: graphapp/static
+
+- url: .*
+  script : graphapp.app
+libraries:
+- name: d3js
+  version: latest
