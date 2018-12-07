@@ -1,37 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-    <title>D3 Axis Example</title>
-    
-    </head>
+{% extends "layout.html" %}
 
-    <meta charset="utf-8">
-    <style type="text/css">
+{% block content %}
 
-    svg {
-       font-family: "Helvetica Neue", Helvetica;
-    }
-
-    line {
-       shape-rendering: crispEdges;
-       vector-effect: non-scaling-stroke;
-
-       stroke: #000;
-       stroke-width: 5px;
-    }
-
-    .active-d3-item {
-        cursor: pointer;
-    
-        stroke: magenta;
-    }
-
-    </style>
-
-    
-    <body>
-
-    <script src="http://d3js.org/d3.v2.js"></script>
+    <!-- <script src="http://d3js.org/d3.v2.js"></script> -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
         var width = 960,
@@ -161,6 +132,5 @@ function dragended() {
 
           
 </script>
-    
-</body>
-</html>
+
+{% endblock %}
