@@ -3,6 +3,7 @@
 {% block content %}
 
     <!-- <script src="http://d3js.org/d3.v2.js"></script> -->
+    <div id="graph"></div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
         var width = 960,
@@ -11,7 +12,7 @@
             activeClassName = 'active-d3-item';
             
         // create an svg container
-        var svg = d3.select("body").
+        var svg = d3.select("#graph").
             append("svg:svg")
                 .attr("width", width)
                 .attr("height", height);
