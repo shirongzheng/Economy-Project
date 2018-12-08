@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<style>
+.line {
+    stroke: green;
+    stroke-width: 2px;
+  }
+  .line1 {
+    stroke: blue;
+    stroke-width: 2px;
+  }
+  
+  .slider {
+    float: left;
+    width: 160px;
+    margin-top: 30px;
+  }
+  .axis path,
+  
+  .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+  .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+</style>
+
+<body>
+ <div> 
+  <div id="chart1"></div>
+  <div class='slider'>
+    <div>Price/unit:<span id="New_slope"></span></div>
+    <input type="range" min=0 max=2 step=.1 oninput="updateNewSlope(this.value)">
+  </div>
+  <div class='slider'>
+    <div>Variable cost/unit:<span id="slope"></span></div>
+    <input type="range" min=0 max=2 step=.1 oninput="updateSlope(this.value)">
+  </div>
+  <div class='slider'>
+    <div>Fixed cost:<span id="yInt"></span></div>
+    <input type="range" min=0 max=500 step=8.6 oninput="updateYInt(this.value)">
+  </div>
+ </div>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<script>
+var margin = {top: 20, right: 60, bottom: 30, left: 60};
+var width = 720 - margin.left - margin.right;
+var height = 480 - margin.top - margin.bottom;
+var xPadding = 20;
+var yPadding = 35;
+
+var xScale = d3.scale.linear()
+               .domain([0, 10])
+               .range([0, width]);
+
+var yScale = d3.scale.linear()
+               .domain([0, 50])
+               .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+              .scale(xScale)
+              .orient("bottom")
+              .ticks(10);
+
+var yAxis = d3.svg.axis()
+              .scale(yScale)
+              .orient("left")
+              .ticks(10);
+
+  var line = d3.svg.line();
+  var line1 = d3.svg.line();
+
+var svg = d3.select("#chart1")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Adds X axis
+svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+.append("text")
+  .attr("class", "label")
+  .attr("x", width)
+  .attr("y", -6)
+  .style("text-anchor", "end")
+  .text("Units sold");
+
+// Adds Y axis
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+.append("text")
+  .attr("class", "label")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 6)
+  .attr("dy", ".71em")
+  .style("text-anchor", "end")
+  .text("Sales")
+
+  var path = svg.append('path');
+  var path1 = svg.append('path');
+
+  //y = mx + b
+
+  //var m = 0.5;
+  //var m1=1;
+  //var b = 130;
+
+  var m = 1;
+  var m1 = -1;
+  var b = 0;
+  var b1 = 450;
+
+  updateSlope = function (newSlope) {
+    m = newSlope;
+    document.getElementById('slope').textContent = Math.round(newSlope*6);
+    draw();
+  };
+  updateNewSlope = function (newSlope) {
+    m1 = newSlope;
+    document.getElementById('New_slope').textContent = Math.round(newSlope*6);
+    draw();
+  };
+  updateYInt = function (newYInt) {
+    b = newYInt;
+    document.getElementById('yInt').textContent = Math.round(newYInt/8.6);
+    draw();
+  };
+
+  var firstX = 0;
+  var secondX = 600;
+
+  yForX = function (x) {
+    return -1 * x * m - b + height;
+  };
+
+  NewyForX = function (x) {
+      return -1 * x * m1 - b1 + height;
+    };
+
+  // lol axis
+
+  draw = function() {
+    var point1 = [firstX, yForX(firstX)];
+    var point2 = [secondX, yForX(secondX)];
+    var point3 = [firstX, NewyForX(firstX)];
+    var point4 = [secondX, NewyForX(secondX)];
+    points = [point1, point2];
+    points1 = [point3, point4];
+    path.datum(points)
+      .transition()
+      .ease('linear')
+      .attr('d', line)
+      .attr('class', 'line');
+    path1.datum(points1)
+      .transition()
+      .ease('linear')
+      .attr('d', line)
+      .attr('class', 'line1');
+  }
+  draw();
+</script>
+</body>
